@@ -46,13 +46,4 @@ $config['non-work_dates'] = array(
 	'2012-12-26',
 );
 
-define('HOURS_PER_DAY', cwt::coalesce_empty(intval($_GET['daily_hours']), 6));
-
-// hard code mapping between task statuses and internal ids for now
-// (ideally these would be pulled from the api too)
-$config['sla_task_priorities'] = array(
-	75462 => 'critical',
-	75463 => 'serious',
-	75464 => 'medium',
-	75465 => 'minor'
-);
+define('HOURS_PER_DAY', intval($_GET['daily_hours']) ? intval($_GET['daily_hours']) : 6);

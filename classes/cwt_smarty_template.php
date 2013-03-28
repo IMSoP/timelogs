@@ -1,13 +1,14 @@
 <?php
 require_once('Smarty/libs/Smarty.class.php');
+//require_once('Smarty/libs/sysplugins/smarty_security.php');
 class CWT_Smarty_Template extends Smarty 
 {
 	function CWT_Smarty_Template()
 	{
 		global $config;
-		
+
 		// Create a Smarty instance
-		$this->Smarty();
+		$this->__construct();
 		
 		// Set up config directories
 		$this->template_dir = $config['smarty']['template_dir'];
@@ -16,48 +17,29 @@ class CWT_Smarty_Template extends Smarty
 		$this->cache_dir = $config['smarty']['cache_dir'];
 		$this->force_compile = $config['cache']['disable'];
 		
-		$this->security = true;
-		
-		// Throw in some additional PHP functions that are used by existing
-		// templates - these will hopefully be replaced by registered
-		// modifiers fairly soon (or a config var, etc), and this ugliness
-		// can be removed
-		$this->security_settings['MODIFIER_FUNCS'] = array_merge(
-			$this->security_settings['MODIFIER_FUNCS'],
-			array(
-				'urlencode',        // -> use built-in {$foo|escape:url}
-				'htmlspecialchars', // -> use built-in {$foo|escape:html}
-				'strtolower',       // -> use built-in {$foo|lower}
-				
-				'array_slice',      // Useful, but along with the array-related custom
-				                    // modifiers below, should possibly be replaced with 
-				                    // something more task-specific
-				
-				'http_build_query'  // Can maybe be replaced with simpler params
-				                    // pairs nicely with 'generate_hidden_form_elements' below
-			)
-		);
-		
+
+    $this->enableSecurity('Tui_Smarty_Security_Policy');
+
 		// Register custom functions and modifiers
 		// The callback can be function_name, array(class_name, method_name) or array(object, method_name)
 		//	but NOT a pseudo-function name created by create_function()
 		
-		$this->register_modifier('round', 'round');
-		$this->register_modifier('date', array('CWT_Smarty_Template', 'smarty_modifier_date'));
+		$this->registerPlugin('modifier', 'round', 'round');
+		$this->registerPlugin('modifier', 'date', array('CWT_Smarty_Template', 'smarty_modifier_date'));
 		
 		// Allow the site to pass in extra functions / modifiers from config
 		if ( is_array( $config['smarty']['extra_functions'] ) )
 		{
 			foreach ( $config['smarty']['extra_functions'] as $smarty_name => $callback )
 			{
-				$this->register_function($smarty_name, $callback);
+				$this->registerPlugin('function', $smarty_name, $callback);
 			}
 		}
 		if ( is_array( $config['smarty']['extra_modifiers'] ) )
 		{
 			foreach ( $config['smarty']['extra_modifiers'] as $smarty_name => $callback )
 			{
-				$this->register_modifier($smarty_name, $callback);
+				$this->registerPlugin('modifier', $smarty_name, $callback);
 			}
 		}
 	}

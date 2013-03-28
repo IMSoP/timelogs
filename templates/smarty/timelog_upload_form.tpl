@@ -1,6 +1,7 @@
-<form action="timelog_upload.php?mode=save" method="post">
-	API Token: <input type="text" name="api_token" id="api_token" /><br />
-	Person: <select name="personid" id="person" disabled></select><br />
+<form action="?mode=save" method="post">
+  Date: <input type="text" name="date" value="{$date}" placeholder="yyyy-mm-dd" /><br />
+  JIRA Username: <input type="text" name="username" /><br />
+  JIRA Password: <input type="password" name="password" /><br />
 	<table class="homemain">
 		<tr>
 			<th>Log</th>
@@ -12,14 +13,14 @@
 		{foreach from=$timelogs item=timelog key=id}
 			<tr>
 				<td><input type="checkbox" name="task[{$id}][log]" checked="checked" /></td>
-				<td>#<input type="text" name="task[{$id}][intervals_id]" value="{$timelog.task}" size="6" /></td>
+				<td>#<input type="text" name="task[{$id}][issue_key]" value="{$timelog.task}" size="15" /></td>
 				<td><input type="text" name="task[{$id}][description]" value="{$timelog.description}" size="50" /></td>
 				<td><input type="text" name="task[{$id}][duration]" value="{$timelog.recorded_duration}" size="10" /></td>
 				<td>{$timelog.duration}</td>
 			</tr>
 		{/foreach}
 	</table>
-	<input type="submit" value="Post to Intervals" />
+	<input type="submit" value="Post to JIRA" />
 </form>
 
 <script type="text/javascript">

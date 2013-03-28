@@ -5,7 +5,7 @@
 require_once dirname($_SERVER['DOCUMENT_ROOT']) . '/config/config.php';
 require_once dirname($_SERVER['DOCUMENT_ROOT']) . '/config/exceptions.php';
 
-function __autoload($class_name)
+function tui_autoloader($class_name)
 {
 	$class_name = strtolower($class_name);
 	// Probably unnecessary, but make sure the class name is safe
@@ -13,6 +13,8 @@ function __autoload($class_name)
 	{
 		die('Invalid class name ('.$class_name.')');
 	}
-	
-	require_once CONFIG_INCLUDES_SITE.'/'.$class_name.'.php';
+	if (file_exists(CONFIG_INCLUDES_SITE.'/'.$class_name.'.php')) {
+    require_once CONFIG_INCLUDES_SITE.'/'.$class_name.'.php';
+  }
 }
+spl_autoload_register('tui_autoloader');
