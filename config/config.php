@@ -30,6 +30,9 @@ $config['smarty']['cache_dir'] = CONFIG_INCLUDES_CACHE . '/smarty_output/';
 $config['smarty']['extra_modifiers'] = array (
 );
 
+// Automatically multiple time by this amount, e.g. to take account of management hours. 1.2 is a 20% increase.
+$config['time_adjustment'] = 1.2;
+
 // Useful to exclude bank holidays etc
 $config['non-work_dates'] = array(
 	'2011-08-29',

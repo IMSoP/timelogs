@@ -48,8 +48,8 @@ if (isset($_FILES['timelogs']))
 		$actual_duration = explode(':', $line[1]);
 		$duration_mins = ($actual_duration[0] * 60) + $actual_duration[1];
 
-		// Log an extra 20% for management time, rounded to nearest 5 minutes
-		$duration_mins = round(($duration_mins * 1.2) / 5) * 5;
+		// Log extra for management time, rounded to nearest 5 minutes
+		$duration_mins = round(($duration_mins * $GLOBALS['config']['time_adjustment']) / 5) * 5;
 
 		$duration = array(
 			intval($duration_mins / 60),

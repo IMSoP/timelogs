@@ -5,6 +5,10 @@
 require_once dirname($_SERVER['DOCUMENT_ROOT']) . '/config/config.php';
 require_once dirname($_SERVER['DOCUMENT_ROOT']) . '/config/exceptions.php';
 
+if (!isset($config['time_adjustment'])) {
+	$config['time_adjustment'] = 1;
+}
+
 function tui_autoloader($class_name)
 {
 	$class_name = strtolower($class_name);
