@@ -9,14 +9,16 @@
 			<th>Description</th>
 			<th>Recorded Time Taken</th>
 			<th>Actual Time Taken</th>
+			<th>Harvest description</th>
 		</tr>
 		{foreach from=$timelogs item=timelog key=id}
 			<tr>
-				<td><input type="checkbox" name="task[{$id}][log]" checked="checked" /></td>
+				<td><input type="checkbox" name="task[{$id}][log]" {if $timelog.task}checked="checked"{/if} /></td>
 				<td>#<input type="text" name="task[{$id}][issue_key]" value="{$timelog.task}" size="15" /></td>
 				<td><input type="text" name="task[{$id}][description]" value="{$timelog.description}" size="50" /></td>
 				<td><input type="text" name="task[{$id}][duration]" value="{$timelog.recorded_duration}" size="10" /></td>
 				<td>{$timelog.duration}</td>
+				<td><input type="text" onclick="this.select()" value="{$timelog.task} {$timelog.description}" size="60" /></td>
 			</tr>
 		{/foreach}
 	</table>

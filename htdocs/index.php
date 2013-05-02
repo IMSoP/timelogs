@@ -45,36 +45,38 @@ if (isset($_FILES['timelogs']))
 		}
 
 
-		$duration = explode(':', $line[1]);
-		// Round to nearest 5 minutes, with a tendancy to round up
-		$duration[1] = (round(($duration[1] + 1) / 5) * 5);
+		$actual_duration = explode(':', $line[1]);
+		$duration_mins = ($actual_duration[0] * 60) + $actual_duration[1];
 
-		// If rounding caused us to reach an hour, change 60 minutes to one hour
-		if ($duration[1] >= 60)
-		{
-			$duration[0]++;
-			$duration[1] -= 60;
-		}
+		// Log an extra 20% for management time, rounded to nearest 5 minutes
+		$duration_mins = round(($duration_mins * 1.2) / 5) * 5;
 
-    // Take the task number out of the description
-    $description = $line[2];
+		$duration = array(
+			intval($duration_mins / 60),
+			intval($duration_mins % 60)
+		);
+
+
+		// Take the task number out of the description
+		$description = $line[2];
+
 		preg_match('/^([A-Za-z]+\-\d+)/', $description, $matches);
-    if (!empty($matches[1])) {
-      $description = trim(str_replace($matches[1].' ', '', $description));
-    }
-    $task = $matches[1];
+		if (!empty($matches[1])) {
+		  $description = trim(str_replace($matches[1].' ', '', $description));
+		}
+		$task = $matches[1];
 
 		preg_match('/@([\d\.]+)h$/', $description, $matches);
-    if ($matches[1]) {
-      $duration[0] = intval($matches[1]);
-      $duration[1] = ($matches[1]-intval($matches[1]))*60;
-      if (!empty($matches[0])) {
-        $description = trim(str_replace(' '.$matches[0], '', $description));
-      }
-    }
+		if ($matches[1]) {
+		  $duration[0] = intval($matches[1]);
+		  $duration[1] = ($matches[1]-intval($matches[1]))*60;
+		  if (!empty($matches[0])) {
+			$description = trim(str_replace(' '.$matches[0], '', $description));
+		  }
+		}
 
 		$params['timelogs'][] = array(
-			'duration' => $line[1],
+			'duration' => $actual_duration[0].':'.sprintf('%02d', $actual_duration[1]),
 			'recorded_duration' => $duration[0].':'.sprintf('%02d', $duration[1]),
 			'description' => $description,
 			'task' => $task
