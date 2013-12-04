@@ -3,7 +3,7 @@
 require_once(dirname($_SERVER['DOCUMENT_ROOT']) . '/config/startup.php');
 
 
-if ($_GET['mode'] == 'save')
+if (isset($_GET['mode']) && $_GET['mode'] == 'save')
 {
 	foreach ($_POST['task'] as $task)
 	{
@@ -67,7 +67,7 @@ if (isset($_FILES['timelogs']))
 		$task = $matches[1];
 
 		preg_match('/@([\d\.]+)h$/', $description, $matches);
-		if ($matches[1]) {
+		if (isset($matches[1])) {
 		  $duration[0] = intval($matches[1]);
 		  $duration[1] = ($matches[1]-intval($matches[1]))*60;
 		  if (!empty($matches[0])) {

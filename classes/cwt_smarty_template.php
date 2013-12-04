@@ -15,7 +15,7 @@ class CWT_Smarty_Template extends Smarty
 		$this->compile_dir = $config['smarty']['compile_dir'];
 		$this->config_dir = $config['smarty']['config_dir'];
 		$this->cache_dir = $config['smarty']['cache_dir'];
-		$this->force_compile = $config['cache']['disable'];
+		$this->force_compile = !empty($config['cache']['disable']);
 		
 
     $this->enableSecurity('Tui_Smarty_Security_Policy');
@@ -28,7 +28,7 @@ class CWT_Smarty_Template extends Smarty
 		$this->registerPlugin('modifier', 'date', array('CWT_Smarty_Template', 'smarty_modifier_date'));
 		
 		// Allow the site to pass in extra functions / modifiers from config
-		if ( is_array( $config['smarty']['extra_functions'] ) )
+		if ( isset( $config['smarty']['extra_functions'] ) && is_array( $config['smarty']['extra_functions'] ) )
 		{
 			foreach ( $config['smarty']['extra_functions'] as $smarty_name => $callback )
 			{
@@ -52,7 +52,7 @@ class CWT_Smarty_Template extends Smarty
 	{
 		global $config;
 		
-		if (is_array($config['smarty']['template_overrides']))
+		if (isset($config['smarty']['template_overrides']) && is_array($config['smarty']['template_overrides']))
 		{
 			$template = coalesce(
 				$config['smarty']['template_overrides'][$template],
