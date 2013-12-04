@@ -16,44 +16,51 @@
 				<td><input type="checkbox" name="task[{$id}][log]" {if $timelog.task}checked="checked"{/if} /></td>
 				<td>#<input type="text" name="task[{$id}][issue_key]" value="{$timelog.task}" size="15" /></td>
 				<td><input type="text" name="task[{$id}][description]" value="{$timelog.description}" size="50" /></td>
-				<td><input type="text" name="task[{$id}][duration]" value="{$timelog.recorded_duration}" size="10" /></td>
-				<td>{$timelog.duration}</td>
+				<td><input type="text" name="task[{$id}][duration]" value="{$timelog.recorded_duration}" size="10" class="recorded_time" /></td>
+				<td><input type="hidden" name="task[{$id}][actual_time]" value="{$timelog.duration}" size="10" class="actual_time" />{$timelog.duration}</td>
 				<td><input type="text" onclick="this.select()" value="{$timelog.task} {$timelog.description}" size="60" /></td>
 			</tr>
 		{/foreach}
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td id="recorded_total"></td>
+			<td id="actual_total"></td>
+			<td></td>
+		</tr>
 	</table>
 	<input type="submit" value="Post to JIRA" />
 </form>
 
 <script type="text/javascript">
-{* Similar to code in activity_report_form.tpl - Should have a more generic way of doing this *}
-{literal}
-var assignees_for;
-
-function populate_assignees()
-{
-	// Only fetch the managers if we've got a potentially valid API key and we don't already
-	// have the managers for that key
-	if (jQuery('input#api_token').val().length == 11 && $('input#api_token').val() != assignees_for)
-	{
-		assignees_for = $('input#api_token').val();
-		$.getJSON(
-			"ajax.php",{resource: 'person', api_token: $('input#api_token').val(), 'api_params[clientid]': -1}, 
-			function(j){
-				var options = '<option value="">&laquo; Please Select &raquo;</option>';
-				for (var i = 0; i < j.length; i++) {
-				options += '<option value="' + j[i].person_id + '">' + j[i].name + '</option>';
-			}
-			$("select#person").html(options);
-			$("select#person").attr('disabled', false);
-		})
-	}
-	$('input#api_token').val();
+function time2mins(time) {
+  var split_time = time.split(':');
+  return parseInt(split_time[0]) * 60 + parseInt(split_time[1]);
 }
-
-jQuery('input#api_token').change( function() { populate_assignees(); } );
-jQuery('input#api_token').keypress( function() { populate_assignees(); } );
-jQuery().ready(populate_assignees());
-
-{/literal}
+function mins2time(time) {
+  return zero_pad(Math.floor(time / 60), 1) + ':' + zero_pad(time % 60, 2);
+}
+function zero_pad(num, places) {
+  var zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join("0") + num;
+}
+function update_totals()
+{
+  var total_recorded_mins = 0;
+  var total_actual_mins = 0;
+  for (var i = 0; i < jQuery('.recorded_time').length; i++) {
+    total_recorded_mins += time2mins(jQuery('.recorded_time')[i].value);
+    total_actual_mins += time2mins(jQuery('.actual_time')[i].value);
+  }
+  jQuery('#recorded_total').html(mins2time(total_recorded_mins));
+  jQuery('#actual_total').html(mins2time(total_actual_mins));
+}
+jQuery().ready(update_totals());
+jQuery('.recorded_time').change(function() {
+  if (this.value.indexOf(':') == -1) {
+    this.value += ':00';
+  }
+  update_totals();
+});
 </script>
