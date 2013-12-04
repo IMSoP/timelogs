@@ -16,7 +16,7 @@ class CWT
 	 * but CWT::coalesce( hard_work(), 'default' ) only has to do hard_work() once
 	 * [OTOH, CWT::coalesce( $a, hard_work() ) has to do hard_work() even if the result gets thrown away]
 	 */
-	function coalesce()
+	public static function coalesce()
 	{
 		foreach ( func_get_args() as $arg )
 		{
@@ -38,7 +38,7 @@ class CWT
 	 * but CWT::coalesce_empty( hard_work(), 'default' ) only has to do hard_work() once
 	 * [OTOH, CWT::coalesce_empty( $a, hard_work() ) has to do hard_work() even if the result gets thrown away]
 	 */
-	function coalesce_empty()
+	public static function coalesce_empty()
 	{
 		foreach ( func_get_args() as $arg )
 		{

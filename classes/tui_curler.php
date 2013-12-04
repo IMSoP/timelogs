@@ -31,14 +31,14 @@ class TUI_Curler
 			throw new CWT_Curler_Exception(null, 'Could not initialise Curl', CWT_Curler_Exception::EX_CANT_INITIALISE);
 		}
 		
-    // Using older version of SSL because of incompatibility between OpenSSH server/client when using TLS
-    curl_setopt($this->curl, CURLOPT_SSLVERSION, 3);
+		// Using older version of SSL because of incompatibility between OpenSSH server/client when using TLS
+		curl_setopt($this->curl, CURLOPT_SSLVERSION, 3);
 		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true);
-		curl_setopt($this->curl, CURLOPT_USERAGENT, 
-			cwt::coalesce($config['curler']['user_agent'], 'CWT Curler Library')
+		curl_setopt($this->curl, CURLOPT_USERAGENT,
+			isset($config['curler']['user_agent']) ? $config['curler']['user_agent'] : 'CWT Curler Library'
 		);
     if ($basic_auth) {
       curl_setopt($this->curl, CURLOPT_USERPWD, $basic_auth);
