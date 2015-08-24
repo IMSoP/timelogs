@@ -17,15 +17,7 @@ class Tui_Jira
 
 		$start_time = microtime(true);
 
-		list($project_key, $issue_id) = explode('-', $issue_key);
-
-		if (isset($GLOBALS['config']['jira_instance'][strtoupper($project_key)])) {
-			$api_url = $GLOBALS['config']['jira_instance'][strtoupper($project_key)];
-		}
-		else {
-			$api_url = $GLOBALS['config']['jira_instance']['default'];
-		}
-
+		$api_url = self::get_instance_url($issue_key);
 		$url = $api_url.'/rest/api/2/issue/'.$issue_key.'/worklog?adjustEstimate=auto';
 
 		$request = array(
@@ -50,6 +42,18 @@ class Tui_Jira
 		self::$debug['call_timers'][$issue_key][] = microtime(true) - $start_time;
 
 		return $result['headers']['HTTP-Status'] == 201;
+	}
+
+	public static function get_instance_url($issue_key)
+	{
+		list($project_key, $issue_id) = explode('-', $issue_key);
+
+		if (isset($GLOBALS['config']['jira_instance'][strtoupper($project_key)])) {
+			return $GLOBALS['config']['jira_instance'][strtoupper($project_key)];
+		}
+		else {
+			return $GLOBALS['config']['jira_instance']['default'];
+		}
 	}
 
 	/**
