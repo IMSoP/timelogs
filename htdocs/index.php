@@ -60,9 +60,9 @@ if (isset($_FILES['timelogs']))
 		// Take the task number out of the description
 		$description = $line[2];
 
-		preg_match('/^([A-Za-z]+\-\d+)/', $description, $matches);
+		preg_match('/\b([A-Za-z]+\-\d+)\b/', $description, $matches);
 		if (!empty($matches[1])) {
-		  $description = trim(str_replace($matches[1].' ', '', $description));
+		  $description = trim(preg_replace('/\b'.$matches[1].'\b/', '', $description));
 		}
 		$task = $matches[1];
 
