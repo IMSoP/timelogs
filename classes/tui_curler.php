@@ -31,8 +31,6 @@ class TUI_Curler
 			throw new CWT_Curler_Exception(null, 'Could not initialise Curl', CWT_Curler_Exception::EX_CANT_INITIALISE);
 		}
 		
-		// Using older version of SSL because of incompatibility between OpenSSH server/client when using TLS
-		curl_setopt($this->curl, CURLOPT_SSLVERSION, 3);
 		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, false);
