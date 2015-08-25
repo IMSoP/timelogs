@@ -10,15 +10,18 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'save')
 		if ($task['log'])
 		{
 			$task_time = explode(':', $task['duration']);
-      $success = Tui_Jira::post_worklog($task['issue_key'], $task['description'], $_POST['date'].'T09:00:00.000-0000', "{$task_time[0]}h {$task_time[1]}m");
-      if ($success) {
-        echo '<a href="https://jira.tuisasweb.com/browse/'.htmlspecialchars(urlencode($task['issue_key'])).'">'.htmlspecialchars($task['issue_key'])."</a> logged successfully.<br>";
-      }
-      else {
-        echo '<strong style="color: red;">Error logging '.htmlspecialchars($task['issue_key']).'.</strong><br>';
-      }
+			$success = Tui_Jira::post_worklog($task['issue_key'], $task['description'], $_POST['date'].'T09:00:00.000-0000', "{$task_time[0]}h {$task_time[1]}m");
+			if ($success) {
+				echo '<a href="' . Tui_Jira::get_instance_url($task['issue_key']) . '/browse/'
+					. htmlspecialchars(urlencode($task['issue_key'])).'">'
+					. htmlspecialchars($task['issue_key'])."</a> logged successfully.<br>";
+			}
+			else {
+				echo '<strong style="color: red;">Error logging '.htmlspecialchars($task['issue_key']).'.</strong><br>';
+			}
 		}
 	}
+	echo '<hr />';
 	//Tui_Jira::print_timers();
 }
 
