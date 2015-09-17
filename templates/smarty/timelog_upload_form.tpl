@@ -46,10 +46,13 @@ function zero_pad(num, places) {
 }
 function update_totals()
 {
+  var $active_rows = jQuery('tr').has('input[name$="[log]"]:checked');
   var total_recorded_mins = 0;
   var total_actual_mins = 0;
-  for (var i = 0; i < jQuery('.recorded_time').length; i++) {
-    total_recorded_mins += time2mins(jQuery('.recorded_time')[i].value);
+  for (var i = 0; i < $active_rows.length; i++) {
+    total_recorded_mins += time2mins($active_rows.find('.recorded_time')[i].value);
+  }
+  for (var i = 0; i < jQuery('.actual_time').length; i++) {
     total_actual_mins += time2mins(jQuery('.actual_time')[i].value);
   }
   jQuery('#recorded_total').html(mins2time(total_recorded_mins));
@@ -60,6 +63,9 @@ jQuery('.recorded_time').change(function() {
   if (this.value.indexOf(':') == -1) {
     this.value += ':00';
   }
+  update_totals();
+});
+jQuery('input[type=checkbox]').change(function() {
   update_totals();
 });
 </script>
