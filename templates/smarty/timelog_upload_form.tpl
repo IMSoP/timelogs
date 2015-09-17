@@ -1,15 +1,16 @@
 <form action="?mode=save" method="post">
-  Date: <input type="text" name="date" value="{$date}" placeholder="yyyy-mm-dd" /><br />
-  JIRA Username: <input type="text" name="username" /><br />
-  JIRA Password: <input type="password" name="password" /><br />
-	<table class="homemain">
+<fieldset style="width: 300px; margin: 5px;">
+  <label>Date: <input type="text" name="date" value="{$date}" placeholder="yyyy-mm-dd" /></label><br />
+  <label>JIRA Username: <input type="text" name="username" /></label><br />
+  <label>JIRA Password: <input type="password" name="password" /></label><br />
+</fieldset>
+	<table style="margin: 5px;">
 		<tr>
-			<th>Log</th>
+			<th>Log?</th>
 			<th>Task #</th>
 			<th>Description</th>
-			<th>Recorded Time Taken</th>
-			<th>Actual Time Taken</th>
-			<th>Harvest description</th>
+			<th>Recorded Time</th>
+			<th>Actual Time</th>
 		</tr>
 		{foreach from=$timelogs item=timelog key=id}
 			<tr>
@@ -18,16 +19,14 @@
 				<td><input type="text" name="task[{$id}][description]" value="{$timelog.description}" size="50" /></td>
 				<td><input type="text" name="task[{$id}][duration]" value="{$timelog.recorded_duration}" size="10" class="recorded_time" /></td>
 				<td><input type="hidden" name="task[{$id}][actual_time]" value="{$timelog.duration}" size="10" class="actual_time" />{$timelog.duration}</td>
-				<td><input type="text" onclick="this.select()" value="{$timelog.task} {$timelog.description}" size="60" /></td>
 			</tr>
 		{/foreach}
-		<tr>
+		<tr style="font-weight: bold;">
 			<td></td>
 			<td></td>
-			<td></td>
+			<td>TOTAL</td>
 			<td id="recorded_total"></td>
 			<td id="actual_total"></td>
-			<td></td>
 		</tr>
 	</table>
 	<input type="submit" value="Post to JIRA" />
