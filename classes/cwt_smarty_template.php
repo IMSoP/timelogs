@@ -1,14 +1,13 @@
 <?php
-require_once('Smarty/libs/Smarty.class.php');
-//require_once('Smarty/libs/sysplugins/smarty_security.php');
-class CWT_Smarty_Template extends Smarty 
+
+class CWT_Smarty_Template extends Smarty
 {
-	function CWT_Smarty_Template()
+	function __construct()
 	{
 		global $config;
 
 		// Create a Smarty instance
-		$this->__construct();
+		parent::__construct();
 		
 		// Set up config directories
 		$this->template_dir = $config['smarty']['template_dir'];

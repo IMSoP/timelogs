@@ -1,6 +1,6 @@
 <?php
 //	---- CLIENT-SPECIFIC CONFIGURATION ----
-define('CONFIG_INCLUDES_ROOT', dirname($_SERVER['DOCUMENT_ROOT']));
+define('CONFIG_INCLUDES_ROOT', dirname(__DIR__));
 
 //// APPLICATION CONFIG ////
 

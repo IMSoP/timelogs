@@ -1,0 +1,19 @@
+{
+    "name": "iant/r3t3-timelog",
+    "authors": [
+        {
+            "name": "Ian Thomas",
+            "email": "ian@ithomas.name"
+        },
+        {
+            "name": "Rowan Collins",
+            "email": "git@rwec.co.uk"
+        }
+    ],
+    "require": {
+        "smarty/smarty": "^3.1"
+    },
+    "autoload": {
+        "classmap": ["classes/"]
+    }
+}

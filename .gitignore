@@ -1,2 +1,5 @@
 /nbproject/*
 /logs/*
+.idea/
+/vendor/
+/cache/
