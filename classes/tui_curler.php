@@ -62,7 +62,7 @@ class TUI_Curler
 	
 	/**
 	 * Trivial static version of constructor, to allow quick chained calls
-	 *	e.g. $response = Tui_Curler::create($url)->send_get();
+	 *	e.g. $response = TUI_Curler::create($url)->send_get();
 	 * @throws CWT_Curler_Exception::EX_CANT_INITIALISE
 	 */
 	public static function create($url=null, $timeout=null, $headers=null)
@@ -130,10 +130,10 @@ class TUI_Curler
 		global $config;
 		
 		curl_setopt($this->curl, CURLOPT_TIMEOUT,        
-			cwt::coalesce($overall_timeout, $config['curler']['default_timeout'])
+			CWT::coalesce($overall_timeout, $config['curler']['default_timeout'])
 		);
 		curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT,
-			cwt::coalesce(
+			CWT::coalesce(
 				$connect_timeout, $config['curler']['default_connect_timeout'],
 				$overall_timeout, $config['curler']['default_timeout']
 			)
@@ -156,7 +156,7 @@ class TUI_Curler
 	 *
 	 * @param string $proxy_address Complete address of proxy; can include port, username and password
 	 *	e.g. 'user:pass@proxy.example.com:8080'
-	 * @return Tui_Curler Chainable
+	 * @return TUI_Curler Chainable
 	 */
 	public function set_proxy_server($proxy_address)
 	{
