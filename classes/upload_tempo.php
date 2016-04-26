@@ -10,7 +10,7 @@ class Upload_Tempo
 	private static $api_password;
 	private static $debug = array('call_timers' => array());
 
-	public function post_worklog($issue_key, $comment, $started, $time_spent_h, $time_spent_m)
+	public function post_worklog($issue_key, $comment, $started, $time_spent_h, $time_spent_m, $worktype)
 	{
 		self::$api_username = $_REQUEST['username'];
 		self::$api_password = $_REQUEST['password'];
@@ -47,7 +47,7 @@ class Upload_Tempo
 			[
 				[
 					"key"   => "_Worktype_",
-					"value" => "Development"
+					"value" => $worktype
 				]
 			],
 			"issue"            => [
@@ -78,7 +78,7 @@ class Upload_Tempo
 
 		self::$debug['call_timers'][$issue_key][] = microtime(true) - $start_time;
 
-		return $result['headers']['HTTP-Status'] == 201;
+		return $result['headers']['HTTP-Status'] == 200;
 	}
 
 	public function get_instance_url($issue_key)

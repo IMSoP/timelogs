@@ -11,6 +11,7 @@
 			<th>Description</th>
 			<th>Recorded Time</th>
 			<th>Actual Time</th>
+			<th>Work Type</th>
 			<th>Task Name</th>
 		</tr>
 		{foreach from=$timelogs item=timelog key=id}
@@ -20,6 +21,13 @@
 				<td><input type="text" name="task[{$id}][description]" value="{$timelog.description}" size="50" /></td>
 				<td><input type="text" name="task[{$id}][duration]" value="{$timelog.recorded_duration}" size="10" class="recorded_time" /></td>
 				<td><input type="hidden" name="task[{$id}][actual_time]" value="{$timelog.duration}" size="10" class="actual_time" />{$timelog.duration}</td>
+				<td>
+					<select name="task[{$id}][worktype]">
+					{foreach from=$worktypes item=option}
+						<option value="{$option.key}" {if $option.key eq 'Development'}selected="selected"{/if}>{$option.value}</option>
+					{/foreach}
+					</select>
+				</td>
 				<td><span class="task_name"></span></td>
 			</tr>
 		{/foreach}

@@ -10,7 +10,7 @@ class Upload_Standard_JIRA
 	private static $api_password;
 	private static $debug = array('call_timers' => array());
 
-	public function post_worklog($issue_key, $comment, $started, $time_spent_h, $time_spent_m)
+	public function post_worklog($issue_key, $comment, $started, $time_spent_h, $time_spent_m, $worktype)
 	{
 		$time_spent = "{$time_spent_h}h {$time_spent_m}m";
 

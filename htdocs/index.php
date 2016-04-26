@@ -20,7 +20,12 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'save')
 		if ($task['log'])
 		{
 			$task_time = explode(':', $task['duration']);
-			$success = $uploader->post_worklog($task['issue_key'], $task['description'], $_POST['date'].'T09:00:00.000-0000', $task_time[0], $task_time[1]);
+			$success = $uploader->post_worklog(
+				$task['issue_key'], $task['description'],
+				$_POST['date'].'T09:00:00.000-0000',
+				$task_time[0], $task_time[1],
+				$task['worktype']
+			);
 			if ($success) {
 				echo '<a href="' . $uploader->get_instance_url($task['issue_key']) . '/browse/'
 					. htmlspecialchars(urlencode($task['issue_key'])).'">'
@@ -37,10 +42,14 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'save')
 
 if (isset($_FILES['timelogs']))
 {
+	$worktype_data = (new TUI_Curler('https://jira-endpoint.uat.cwtdigital.com/worktypes.php?callback='))->send_get();
+	$worktypes = json_decode(trim($worktype_data['content'], '()'), true);
+
 	$file = file($_FILES['timelogs']['tmp_name']);
 	$params = array(
 		'date' => substr($_FILES['timelogs']['name'], 0, 10),
-		'timelogs' => array()
+		'timelogs' => array(),
+		'worktypes' => $worktypes['values']
 	);
 	foreach ($file as $key => $line)
 	{
