@@ -11,6 +11,7 @@
 			<th>Description</th>
 			<th>Recorded Time</th>
 			<th>Actual Time</th>
+			<th>Task Name</th>
 		</tr>
 		{foreach from=$timelogs item=timelog key=id}
 			<tr>
@@ -19,6 +20,7 @@
 				<td><input type="text" name="task[{$id}][description]" value="{$timelog.description}" size="50" /></td>
 				<td><input type="text" name="task[{$id}][duration]" value="{$timelog.recorded_duration}" size="10" class="recorded_time" /></td>
 				<td><input type="hidden" name="task[{$id}][actual_time]" value="{$timelog.duration}" size="10" class="actual_time" />{$timelog.duration}</td>
+				<td><span class="task_name"></span></td>
 			</tr>
 		{/foreach}
 		<tr style="font-weight: bold;">
@@ -27,6 +29,7 @@
 			<td>TOTAL</td>
 			<td id="recorded_total"></td>
 			<td id="actual_total"></td>
+			<td></td>
 		</tr>
 	</table>
 	<input type="submit" value="Post to JIRA" />
@@ -68,4 +71,32 @@ jQuery('.recorded_time').change(function() {
 jQuery('input[type=checkbox]').change(function() {
   update_totals();
 });
+
+function get_task_info($table_row, task_key)
+{
+	jQuery.post(
+		'ajax.php',
+		{
+			'mode': 'get_task_info',
+			'key': task_key,
+			'username': jQuery('input[name=username]').val(),
+			'password': jQuery('input[name=password]').val()
+		},
+		function task_info_success(task_data) {
+			$table_row.find('.task_name').text( task_data.fields.summary );
+		}
+	);
+}
+// Ugly: delay so password manager has a chance to work
+setTimeout(function(){
+	var $non_empty_rows = jQuery('tr').has('input[name$="[issue_key]"]:[value!=""]');
+	$non_empty_rows.each(function() {
+		var $row = jQuery(this);
+		get_task_info($row, $row.find('input[name$="[issue_key]"]').val());
+	});
+
+	jQuery('input[name$="[issue_key]"]').bind('change', function() {
+		get_task_info(jQuery(this).closest('tr'), jQuery(this).val());
+	});
+}, 100);
 </script>
