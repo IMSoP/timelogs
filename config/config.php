@@ -31,7 +31,7 @@ $config['smarty']['extra_modifiers'] = array (
 );
 
 // Automatically multiple time by this amount, e.g. to take account of management hours. 1.2 is a 20% increase.
-$config['time_adjustment'] = 1.2;
+$config['time_adjustment'] = 1;
 
 // Useful to exclude bank holidays etc
 $config['non-work_dates'] = array(
@@ -52,7 +52,6 @@ $config['non-work_dates'] = array(
 define('HOURS_PER_DAY', intval($_GET['daily_hours']) ? intval($_GET['daily_hours']) : 6);
 
 // Specify different JIRA instances for each project, keyed by the uppercase project key. Falls back to 'default'
-$config['jira_instance']['default'] = 'https://expedu.atlassian.net';
-//$config['jira_instance']['BAU'] = 'https://expedu.atlassian.net';
-//$config['jira_instance']['DOMINO'] = 'https://expedu.atlassian.net';
-//$config['jira_instance']['TOOLKIT'] = 'https://expedu.atlassian.net';
+$config['jira_instance']['default'] = 'https://cwtdigital.atlassian.net';
+
+$config['upload_type'] = 'tempo';

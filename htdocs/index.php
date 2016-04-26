@@ -1,7 +1,17 @@
 <?php
 
-require_once(dirname($_SERVER['DOCUMENT_ROOT']) . '/config/startup.php');
+require_once(__DIR__ . '/../config/startup.php');
 
+switch ( $config['upload_type'] )
+{
+	case 'tempo':
+		$uploader = new Upload_Tempo;
+	break;
+	case 'jira':
+	default:
+		$uploader = new Upload_Standard_JIRA;
+	break;
+}
 
 if (isset($_GET['mode']) && $_GET['mode'] == 'save')
 {
@@ -10,9 +20,9 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'save')
 		if ($task['log'])
 		{
 			$task_time = explode(':', $task['duration']);
-			$success = Tui_Jira::post_worklog($task['issue_key'], $task['description'], $_POST['date'].'T09:00:00.000-0000', "{$task_time[0]}h {$task_time[1]}m");
+			$success = $uploader->post_worklog($task['issue_key'], $task['description'], $_POST['date'].'T09:00:00.000-0000', $task_time[0], $task_time[1]);
 			if ($success) {
-				echo '<a href="' . Tui_Jira::get_instance_url($task['issue_key']) . '/browse/'
+				echo '<a href="' . $uploader->get_instance_url($task['issue_key']) . '/browse/'
 					. htmlspecialchars(urlencode($task['issue_key'])).'">'
 					. htmlspecialchars($task['issue_key'])."</a> logged successfully.<br>";
 			}
@@ -22,7 +32,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'save')
 		}
 	}
 	echo '<hr />';
-	//Tui_Jira::print_timers();
+	// $uploader->print_timers();
 }
 
 if (isset($_FILES['timelogs']))
